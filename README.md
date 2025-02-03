@@ -5,8 +5,6 @@
 
 ## Descrição do projeto
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
 ## Como rodar pela primeira vez
 
 ```bash
