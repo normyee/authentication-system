@@ -15,6 +15,7 @@ import { CreateListUseCase } from 'src/user-auth/application/usecases/create-lis
 import { UpdateListUseCase } from 'src/user-auth/application/usecases/update-list.use-case';
 import { GetListByIdUseCase } from 'src/user-auth/application/usecases/get-list-by-id.use-case';
 import { DeleteListUseCase } from 'src/user-auth/application/usecases/delete-list.use-case';
+import { RequestSession } from 'src/common/types';
 
 @UseGuards(AuthGuard)
 @Controller('list')
@@ -27,7 +28,7 @@ export class AppController {
   ) {}
 
   @Post()
-  async create(@Req() req: any, @Body() data: any): Promise<any> {
+  async create(@Req() req: RequestSession, @Body() data: any): Promise<any> {
     const list = await this._createListUseCase.execute(req.session, data);
 
     if (!list) throw new UnauthorizedException('Sem acesso ao recurso');
@@ -37,7 +38,7 @@ export class AppController {
 
   @Post(':id')
   async update(
-    @Req() req: any,
+    @Req() req: RequestSession,
     @Param('id', ParseIntPipe) id: number,
     @Body() data: any,
   ): Promise<any> {
@@ -50,7 +51,7 @@ export class AppController {
 
   @Get(':id')
   async getById(
-    @Req() req: any,
+    @Req() req: RequestSession,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<any> {
     const list = this._getListByIdUseCase.execute(req.session, id);
@@ -62,10 +63,10 @@ export class AppController {
 
   @Delete(':id')
   async delete(
-    @Req() req: any,
+    @Req() req: RequestSession,
     @Param('id', ParseIntPipe) id: number,
   ): Promise<any> {
-    const list = this._deleteListUseCase.execute(req.token, id);
+    const list = this._deleteListUseCase.execute(req.session, id);
 
     if (!list) throw new UnauthorizedException('Sem acesso ao recurso');
 
