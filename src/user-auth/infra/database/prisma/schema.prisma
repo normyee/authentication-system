@@ -12,4 +12,14 @@ model User {
   name     String
   email    String @unique
   password String
+  verified  Boolean @default(false) 
+  lists     List[]  
+}
+
+model List {
+  id      Int      @id @default(autoincrement())
+  name    String
+  items   String[] 
+  userId  Int
+  user    User     @relation(fields: [userId], references: [id])
 }
