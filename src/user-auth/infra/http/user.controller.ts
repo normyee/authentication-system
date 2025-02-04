@@ -17,18 +17,32 @@ export class AuthController {
 
   @Post('signup')
   async signUp(@Body() userDTO: UserDTO) {
-    return await this._registerUserUseCase.execute(userDTO);
+    const user = await this._registerUserUseCase.execute(userDTO);
+
+    return {
+      data: { name: user.name, email: user.email },
+      message: 'usuário cadastrado',
+      success: true,
+    };
   }
 
   @Post('login')
   async login(@Body() credentials: LoginDTO) {
-    return await this._loginUserUseCase.execute(credentials);
+    const userToken = await this._loginUserUseCase.execute(credentials);
+
+    return {
+      data: { accessToken: userToken },
+      message: 'Login efetuado com successo',
+      success: true,
+    };
   }
 
   @UseGuards(AuthGuard)
   @Get('logout')
   async logout(@Req() req: RequestSession) {
     const sessionToken = req.session.token;
-    return await this._logoutUserUseCase.execute(sessionToken);
+    const message = await this._logoutUserUseCase.execute(sessionToken);
+
+    return { message, success: true };
   }
 }

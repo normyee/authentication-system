@@ -17,7 +17,6 @@ import { GetListByIdUseCase } from 'src/user-auth/application/usecases/get-list-
 import { DeleteListUseCase } from 'src/user-auth/application/usecases/delete-list.use-case';
 import { RequestSession } from 'src/common/types';
 import { ListDTO } from 'src/user-auth/application/dtos/list.dto';
-import { ListResponseDTO } from 'src/user-auth/application/dtos/list-response.dto';
 
 @UseGuards(AuthGuard)
 @Controller('list')
@@ -30,15 +29,16 @@ export class AppController {
   ) {}
 
   @Post()
-  async create(
-    @Req() req: RequestSession,
-    @Body() data: ListDTO,
-  ): Promise<ListResponseDTO> {
+  async create(@Req() req: RequestSession, @Body() data: ListDTO) {
     const list = await this._createListUseCase.execute(req.session, data);
 
     if (!list) throw new UnauthorizedException('Sem acesso ao recurso');
 
-    return list;
+    return {
+      data: list,
+      message: 'Sua lista foi criada com sucesso',
+      success: true,
+    };
   }
 
   @Post(':id')
@@ -46,35 +46,47 @@ export class AppController {
     @Req() req: RequestSession,
     @Param('id', ParseIntPipe) id: number,
     @Body() data: ListDTO,
-  ): Promise<ListResponseDTO> {
+  ) {
     const list = await this._updateListUseCase.execute(req.session, id, data);
 
     if (!list) throw new UnauthorizedException('Sem acesso ao recurso');
 
-    return list;
+    return {
+      data: list,
+      message: 'Sua lista foi atualizada com sucesso',
+      success: true,
+    };
   }
 
   @Get(':id')
   async getById(
     @Req() req: RequestSession,
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<ListResponseDTO> {
+  ) {
     const list = await this._getListByIdUseCase.execute(req.session, id);
 
     if (!list) throw new UnauthorizedException('Sem acesso ao recurso');
 
-    return list;
+    return {
+      data: list,
+      message: 'Sua lista foi buscada com sucesso',
+      success: true,
+    };
   }
 
   @Delete(':id')
   async delete(
     @Req() req: RequestSession,
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<ListResponseDTO> {
+  ) {
     const list = await this._deleteListUseCase.execute(req.session, id);
 
     if (!list) throw new UnauthorizedException('Sem acesso ao recurso');
 
-    return list;
+    return {
+      data: list,
+      message: 'Sua lista foi atualizada com sucesso',
+      success: true,
+    };
   }
 }

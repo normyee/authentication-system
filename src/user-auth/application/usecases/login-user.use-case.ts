@@ -23,11 +23,6 @@ export class LoginUserUseCase {
 
     if (!passwordMatch) throw new UnauthorizedException('Login incorreto');
 
-    const loginToken = this._signatureSecutiry.generateCredentialToken(user.id);
-    return {
-      data: { accessToken: loginToken },
-      message: 'Login efetuado com successo',
-      success: true,
-    };
+    return this._signatureSecutiry.generateCredentialToken(user.id);
   }
 }
