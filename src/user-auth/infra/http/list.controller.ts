@@ -10,17 +10,25 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { ListService } from '../../application/list.service';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { CreateListUseCase } from 'src/user-auth/application/usecases/create-list.use-case';
+import { UpdateListUseCase } from 'src/user-auth/application/usecases/update-list.use-case';
+import { GetListByIdUseCase } from 'src/user-auth/application/usecases/get-list-by-id.use-case';
+import { DeleteListUseCase } from 'src/user-auth/application/usecases/delete-list.use-case';
 
 @UseGuards(AuthGuard)
 @Controller('list')
 export class AppController {
-  constructor(private readonly listService: ListService) {}
+  constructor(
+    private readonly _createListUseCase: CreateListUseCase,
+    private readonly _updateListUseCase: UpdateListUseCase,
+    private readonly _getListByIdUseCase: GetListByIdUseCase,
+    private readonly _deleteListUseCase: DeleteListUseCase,
+  ) {}
 
   @Post()
   async create(@Req() req: any, @Body() data: any): Promise<any> {
-    const list = await this.listService.create(req.session, data);
+    const list = await this._createListUseCase.execute(req.session, data);
 
     if (!list) throw new UnauthorizedException('Sem acesso ao recurso');
 
@@ -29,19 +37,38 @@ export class AppController {
 
   @Post(':id')
   async update(
+    @Req() req: any,
     @Param('id', ParseIntPipe) id: number,
     @Body() data: any,
   ): Promise<any> {
-    return this.listService.update(id, data);
+    const list = this._updateListUseCase.execute(req.session, id, data);
+
+    if (!list) throw new UnauthorizedException('Sem acesso ao recurso');
+
+    return list;
   }
 
   @Get(':id')
-  async getById(@Param('id', ParseIntPipe) id: number): Promise<any> {
-    return this.listService.getById(id);
+  async getById(
+    @Req() req: any,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<any> {
+    const list = this._getListByIdUseCase.execute(req.session, id);
+
+    if (!list) throw new UnauthorizedException('Sem acesso ao recurso');
+
+    return list;
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<any> {
-    return this.listService.delete(id);
+  async delete(
+    @Req() req: any,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<any> {
+    const list = this._deleteListUseCase.execute(req.token, id);
+
+    if (!list) throw new UnauthorizedException('Sem acesso ao recurso');
+
+    return list;
   }
 }
