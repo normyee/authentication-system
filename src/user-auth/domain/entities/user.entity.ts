@@ -72,11 +72,11 @@ export class User {
     this._verified = value;
   }
 
-  get lists(): string[] {
+  get lists(): List[] {
     return this._lists;
   }
 
-  set lists(value: string[]) {
+  set lists(value: List[]) {
     this._lists = value;
   }
 
@@ -86,7 +86,7 @@ export class User {
     email: string;
     password: string;
     verified: boolean;
-    lists?: string[];
+    lists?: List[];
   }): User {
     if (!validateName(userData.name)) throw new InvalidParamError('name');
 
