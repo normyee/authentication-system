@@ -6,7 +6,7 @@ import {
 import { Email } from '../value-objects/email';
 
 export class User {
-  public readonly id: number;
+  private _id: number;
   private _name: string;
   public readonly email: Email;
   private _password: string;
@@ -21,12 +21,20 @@ export class User {
     verified: boolean,
     lists: string[] = [],
   ) {
-    this.id = id;
+    this._id = id;
     this._name = name;
     this.email = email;
     this._password = password;
     this._verified = verified;
     this._lists = lists;
+  }
+
+  get id(): number {
+    return this._id;
+  }
+
+  set id(value: number) {
+    this._id = value;
   }
 
   get name(): string {
