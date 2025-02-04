@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -7,14 +8,15 @@ import { UserDTO } from './dto/user.dto';
 import { UserRepository } from 'src/user-auth/infra/database/prisma/repositories/user.repository';
 import * as bcrypt from 'bcrypt';
 import { LoginDTO } from './dto/login.dto';
-import { JwtService } from '@nestjs/jwt';
 import { RedisService } from 'src/user-auth/infra/database/redis/redis.service';
+import { ISignatureSecutiry } from 'src/user-auth/application/interfaces/signature-security';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userRepostory: UserRepository,
-    private jwtService: JwtService,
+    @Inject('ISignatureSecutiry')
+    private _signatureSecutiry: ISignatureSecutiry,
     private readonly cacheMemory: RedisService,
   ) {}
   async signUp(data: UserDTO) {
@@ -42,7 +44,7 @@ export class AuthService {
 
     if (!passwordMatch) throw new UnauthorizedException('Login incorreto');
 
-    const loginToken = this.generateCredentialToken(user.id);
+    const loginToken = this._signatureSecutiry.generateCredentialToken(user.id);
     return {
       message: 'Login efetuado com successo',
       accessToken: loginToken,
@@ -57,11 +59,5 @@ export class AuthService {
     await this.cacheMemory.setValue(token, token);
 
     return { message: 'Usuário deslogado com sucesso' };
-  }
-
-  generateCredentialToken(id: number) {
-    const accessToken = this.jwtService.sign({ id }, { expiresIn: '1h' });
-
-    return { accessToken };
   }
 }
