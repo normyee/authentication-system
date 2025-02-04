@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ListRepository } from './user-auth/infra/database/prisma/repositories/list.repository';
 import { RedisModule } from './user-auth/infra/database/redis/redis.module';
+import { RedisService } from './user-auth/infra/database/redis/redis.service';
 
 @Module({
   imports: [
@@ -16,6 +17,17 @@ import { RedisModule } from './user-auth/infra/database/redis/redis.module';
     RedisModule,
   ],
   controllers: [AppController],
-  providers: [ListService, UserRepository, ListRepository],
+  providers: [
+    ListService,
+    UserRepository,
+    {
+      provide: 'IListRepository',
+      useClass: ListRepository,
+    },
+    {
+      provide: 'ICachedMemory',
+      useExisting: RedisService,
+    },
+  ],
 })
 export class AppModule {}

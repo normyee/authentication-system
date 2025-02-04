@@ -1,8 +1,9 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import Redis from 'ioredis';
+import { ICachedMemory } from 'src/user-auth/application/interfaces/cached-memory';
 
 @Injectable()
-export class RedisService implements OnModuleInit {
+export class RedisService implements OnModuleInit, ICachedMemory {
   private redis: Redis;
 
   constructor() {
