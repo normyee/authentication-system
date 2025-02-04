@@ -17,8 +17,8 @@ export class AuthService {
   constructor(
     private readonly userRepostory: UserRepository,
     @Inject('ISignatureSecutiry')
-    private _signatureSecutiry: ISignatureSecutiry,
-    @Inject('IHasher') _hasher: IHasher,
+    private readonly _signatureSecutiry: ISignatureSecutiry,
+    @Inject('IHasher') private readonly _hasher: IHasher,
     private readonly cacheMemory: RedisService,
   ) {}
   async signUp(data: UserDTO) {
@@ -27,7 +27,7 @@ export class AuthService {
     const emailInUse = await this.userRepostory.getUserByEmail(email);
     if (emailInUse) throw new BadRequestException('Email em uso');
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await this._hasher.hash(password, 10);
 
     await this.userRepostory.create({ name, email, password: hashedPassword });
 
@@ -42,7 +42,7 @@ export class AuthService {
     const user = await this.userRepostory.getUserByEmail(email);
     if (!user) throw new UnauthorizedException('Login incorreto');
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    const passwordMatch = await this._hasher.compare(password, user.password);
 
     if (!passwordMatch) throw new UnauthorizedException('Login incorreto');
 
