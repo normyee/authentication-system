@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Post,
   Req,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { ListService } from '../../application/list.service';
@@ -19,7 +20,11 @@ export class AppController {
 
   @Post()
   async create(@Req() req: any, @Body() data: any): Promise<any> {
-    return this.listService.create(req.userId, data);
+    const list = await this.listService.create(req.session, data);
+
+    if (!list) throw new UnauthorizedException('Sem acesso ao recurso');
+
+    return list;
   }
 
   @Post(':id')
