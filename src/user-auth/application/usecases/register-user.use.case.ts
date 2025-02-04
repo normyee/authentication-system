@@ -17,10 +17,16 @@ export class RegisterUserUseCase {
 
     const hashedPassword = await this._hasher.hash(password, 10);
 
-    await this.userRepostory.create({ name, email, password: hashedPassword });
+    const user = await this.userRepostory.create({
+      name,
+      email,
+      password: hashedPassword,
+    });
 
     return {
+      data: { name: user.name, email: user.email },
       message: 'usuário cadastrado',
+      success: true,
     };
   }
 }

@@ -25,8 +25,9 @@ export class LoginUserUseCase {
 
     const loginToken = this._signatureSecutiry.generateCredentialToken(user.id);
     return {
+      data: { accessToken: loginToken },
       message: 'Login efetuado com successo',
-      accessToken: loginToken,
+      success: true,
     };
   }
 }
