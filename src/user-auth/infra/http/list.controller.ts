@@ -16,6 +16,7 @@ import { UpdateListUseCase } from 'src/user-auth/application/usecases/update-lis
 import { GetListByIdUseCase } from 'src/user-auth/application/usecases/get-list-by-id.use-case';
 import { DeleteListUseCase } from 'src/user-auth/application/usecases/delete-list.use-case';
 import { RequestSession } from 'src/common/types';
+import { ListDTO } from 'src/user-auth/application/dtos/list.dto';
 
 @UseGuards(AuthGuard)
 @Controller('list')
@@ -28,7 +29,10 @@ export class AppController {
   ) {}
 
   @Post()
-  async create(@Req() req: RequestSession, @Body() data: any): Promise<any> {
+  async create(
+    @Req() req: RequestSession,
+    @Body() data: ListDTO,
+  ): Promise<any> {
     const list = await this._createListUseCase.execute(req.session, data);
 
     if (!list) throw new UnauthorizedException('Sem acesso ao recurso');
@@ -40,7 +44,7 @@ export class AppController {
   async update(
     @Req() req: RequestSession,
     @Param('id', ParseIntPipe) id: number,
-    @Body() data: any,
+    @Body() data: ListDTO,
   ): Promise<any> {
     const list = this._updateListUseCase.execute(req.session, id, data);
 
