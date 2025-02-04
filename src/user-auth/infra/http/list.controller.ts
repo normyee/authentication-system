@@ -10,7 +10,7 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { AuthGuard } from 'src/user-auth/infra/middlewares/guard/auth.guard';
 import { CreateListUseCase } from 'src/user-auth/application/usecases/create-list.use-case';
 import { UpdateListUseCase } from 'src/user-auth/application/usecases/update-list.use-case';
 import { GetListByIdUseCase } from 'src/user-auth/application/usecases/get-list-by-id.use-case';
