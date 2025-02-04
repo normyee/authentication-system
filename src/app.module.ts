@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './user-auth/infra/http/app.controller';
-import { AppService } from './user-auth/application/app.service';
+import { AppController } from './user-auth/infra/http/list.controller';
+import { ListService } from './user-auth/application/list.service';
 import { PrismaModule } from './user-auth/infra/database/prisma/prisma.module';
 import { UserRepository } from './user-auth/infra/database/prisma/repositories/user.repository';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { ListRepository } from './user-auth/infra/database/prisma/repositories/list.repository';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { JwtModule } from '@nestjs/jwt';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, UserRepository],
+  providers: [ListService, UserRepository, ListRepository],
 })
 export class AppModule {}
