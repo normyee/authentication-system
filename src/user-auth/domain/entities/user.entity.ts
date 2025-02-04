@@ -4,6 +4,7 @@ import {
   validatePassword,
 } from '../common/validators/validators';
 import { Email } from '../value-objects/email';
+import { List } from './list.entity';
 
 export class User {
   private _id: number;
@@ -11,7 +12,7 @@ export class User {
   public readonly email: Email;
   private _password: string;
   private _verified: boolean = false;
-  private _lists: string[] = [];
+  private _lists: List[] = [];
 
   private constructor(
     id: number,
@@ -19,7 +20,7 @@ export class User {
     email: Email,
     password: string,
     verified: boolean,
-    lists: string[] = [],
+    lists: List[] = [],
   ) {
     this._id = id;
     this._name = name;
