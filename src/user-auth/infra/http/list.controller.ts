@@ -17,6 +17,7 @@ import { GetListByIdUseCase } from 'src/user-auth/application/usecases/get-list-
 import { DeleteListUseCase } from 'src/user-auth/application/usecases/delete-list.use-case';
 import { RequestSession } from 'src/common/types';
 import { ListDTO } from 'src/user-auth/application/dtos/list.dto';
+import { ListResponseDTO } from 'src/user-auth/application/dtos/list-response.dto';
 
 @UseGuards(AuthGuard)
 @Controller('list')
@@ -32,7 +33,7 @@ export class AppController {
   async create(
     @Req() req: RequestSession,
     @Body() data: ListDTO,
-  ): Promise<any> {
+  ): Promise<ListResponseDTO> {
     const list = await this._createListUseCase.execute(req.session, data);
 
     if (!list) throw new UnauthorizedException('Sem acesso ao recurso');
@@ -45,8 +46,8 @@ export class AppController {
     @Req() req: RequestSession,
     @Param('id', ParseIntPipe) id: number,
     @Body() data: ListDTO,
-  ): Promise<any> {
-    const list = this._updateListUseCase.execute(req.session, id, data);
+  ): Promise<ListResponseDTO> {
+    const list = await this._updateListUseCase.execute(req.session, id, data);
 
     if (!list) throw new UnauthorizedException('Sem acesso ao recurso');
 
@@ -57,8 +58,8 @@ export class AppController {
   async getById(
     @Req() req: RequestSession,
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<any> {
-    const list = this._getListByIdUseCase.execute(req.session, id);
+  ): Promise<ListResponseDTO> {
+    const list = await this._getListByIdUseCase.execute(req.session, id);
 
     if (!list) throw new UnauthorizedException('Sem acesso ao recurso');
 
@@ -69,8 +70,8 @@ export class AppController {
   async delete(
     @Req() req: RequestSession,
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<any> {
-    const list = this._deleteListUseCase.execute(req.session, id);
+  ): Promise<ListResponseDTO> {
+    const list = await this._deleteListUseCase.execute(req.session, id);
 
     if (!list) throw new UnauthorizedException('Sem acesso ao recurso');
 

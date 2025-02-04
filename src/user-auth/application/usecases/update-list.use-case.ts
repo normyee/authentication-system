@@ -3,6 +3,7 @@ import { Session } from 'src/common/types';
 import { ICachedMemory } from '../interfaces/cached-memory';
 import { IListRepository } from 'src/user-auth/domain/repositories/list.repository';
 import { ListDTO } from '../dtos/list.dto';
+import { ListResponseDTO } from '../dtos/list-response.dto';
 
 @Injectable()
 export class UpdateListUseCase {
@@ -11,7 +12,11 @@ export class UpdateListUseCase {
     private readonly _listRepository: IListRepository,
     @Inject('ICachedMemory') private readonly _cacheMemory: ICachedMemory,
   ) {}
-  async execute(session: Session, id: number, data: ListDTO): Promise<any> {
+  async execute(
+    session: Session,
+    id: number,
+    data: ListDTO,
+  ): Promise<ListResponseDTO> {
     const isBlacklisted = await this._cacheMemory.getValue(session.token);
 
     if (isBlacklisted) return null;
