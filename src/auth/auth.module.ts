@@ -6,6 +6,7 @@ import { RedisModule } from 'src/user-auth/infra/database/redis/redis.module';
 import { AuthController } from 'src/user-auth/infra/http/auth.controller';
 import { jwtSecurity } from 'src/user-auth/infra/services/jwt-security.service';
 import { BcryptService } from 'src/user-auth/infra/services/hash.service';
+import { RedisService } from 'src/user-auth/infra/database/redis/redis.service';
 
 @Module({
   imports: [PrismaModule, RedisModule],
@@ -20,6 +21,10 @@ import { BcryptService } from 'src/user-auth/infra/services/hash.service';
     {
       provide: 'IHasher',
       useClass: BcryptService,
+    },
+    {
+      provide: 'ICachedMemory',
+      useExisting: RedisService,
     },
   ],
   exports: [AuthService],

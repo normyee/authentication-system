@@ -6,20 +6,19 @@ import {
 } from '@nestjs/common';
 import { UserDTO } from './dto/user.dto';
 import { UserRepository } from 'src/user-auth/infra/database/prisma/repositories/user.repository';
-import * as bcrypt from 'bcrypt';
 import { LoginDTO } from './dto/login.dto';
-import { RedisService } from 'src/user-auth/infra/database/redis/redis.service';
 import { ISignatureSecutiry } from 'src/user-auth/application/interfaces/signature-security';
 import { IHasher } from 'src/user-auth/application/interfaces/hasher';
+import { ICachedMemory } from 'src/user-auth/application/interfaces/cached-memory';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userRepostory: UserRepository,
-    @Inject('ISignatureSecutiry')
+    @Inject('ISignatureSecutiry') 
     private readonly _signatureSecutiry: ISignatureSecutiry,
     @Inject('IHasher') private readonly _hasher: IHasher,
-    private readonly cacheMemory: RedisService,
+    @Inject("ICachedMemory") private readonly _cachedMemory: ICachedMemory,
   ) {}
   async signUp(data: UserDTO) {
     const { name, email, password } = data;
@@ -54,11 +53,11 @@ export class AuthService {
   }
 
   async logout(token: string) {
-    const isLoggeout = await this.cacheMemory.getValue(token);
+    const isLoggeout = await this._cachedMemory.getValue(token);
 
     if (isLoggeout) return { message: 'Credencial inválida' };
 
-    await this.cacheMemory.setValue(token, token);
+    await this._cachedMemory.setValue(token, token);
 
     return { message: 'Usuário deslogado com sucesso' };
   }
