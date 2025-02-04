@@ -8,12 +8,14 @@ import { UserRepository } from 'src/user-auth/infra/database/prisma/repositories
 import * as bcrypt from 'bcrypt';
 import { LoginDTO } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { RedisService } from 'src/user-auth/infra/database/redis/redis.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userRepostory: UserRepository,
     private jwtService: JwtService,
+    private readonly cacheMemory: RedisService,
   ) {}
   async signUp(data: UserDTO) {
     const { name, email, password } = data;
@@ -45,6 +47,16 @@ export class AuthService {
       message: 'Login efetuado com successo',
       accessToken: loginToken,
     };
+  }
+
+  async logout(token: string) {
+    const isLoggeout = await this.cacheMemory.getValue(token);
+
+    if (isLoggeout) return { message: 'Credencial inválida' };
+
+    await this.cacheMemory.setValue(token, token);
+
+    return { message: 'Usuário deslogado com sucesso' };
   }
 
   generateCredentialToken(id: number) {
