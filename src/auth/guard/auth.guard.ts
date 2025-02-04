@@ -1,18 +1,22 @@
 import {
   CanActivate,
   ExecutionContext,
+  Inject,
   Injectable,
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 import { RequestSession } from 'src/common/types';
+import { ISignatureSecutiry } from 'src/user-auth/application/interfaces/signature-security';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    @Inject('ISignatureSecutiry')
+    private _signatureSecutiry: ISignatureSecutiry,
+  ) {}
 
   canActivate(
     context: ExecutionContext,
@@ -24,7 +28,7 @@ export class AuthGuard implements CanActivate {
     if (!token) throw new UnauthorizedException('Sem acesso ao recurso');
 
     try {
-      const payload = this.jwtService.verify(token);
+      const payload = this._signatureSecutiry.verifyCredentialToken(token);
       request.session = { userId: payload.id, token: token };
     } catch (error) {
       Logger.error(error.message);

@@ -11,6 +11,7 @@ import { CreateListUseCase } from './user-auth/application/usecases/create-list.
 import { UpdateListUseCase } from './user-auth/application/usecases/update-list.use-case';
 import { GetListByIdUseCase } from './user-auth/application/usecases/get-list-by-id.use-case';
 import { DeleteListUseCase } from './user-auth/application/usecases/delete-list.use-case';
+import { jwtSecurity } from './user-auth/infra/services/jwt-security';
 
 @Module({
   imports: [
@@ -34,6 +35,10 @@ import { DeleteListUseCase } from './user-auth/application/usecases/delete-list.
     UpdateListUseCase,
     GetListByIdUseCase,
     DeleteListUseCase,
+    {
+      provide: 'ISignatureSecutiry',
+      useClass: jwtSecurity,
+    },
   ],
 })
 export class AppModule {}
