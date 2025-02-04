@@ -1,13 +1,13 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserRepository } from 'src/user-auth/infra/database/prisma/repositories/user.repository';
 import { ISignatureSecutiry } from 'src/user-auth/application/interfaces/signature-security';
 import { IHasher } from 'src/user-auth/application/interfaces/hasher';
 import { LoginDTO } from '../dtos/login.dto';
+import { IUserRepository } from 'src/user-auth/domain/repositories/user.repository';
 
 @Injectable()
 export class LoginUserUseCase {
   constructor(
-    private readonly userRepostory: UserRepository,
+    @Inject('IUserRepository') private readonly _userRepostory: IUserRepository,
     @Inject('ISignatureSecutiry')
     private readonly _signatureSecutiry: ISignatureSecutiry,
     @Inject('IHasher') private readonly _hasher: IHasher,
@@ -16,7 +16,7 @@ export class LoginUserUseCase {
   async execute(data: LoginDTO) {
     const { email, password } = data;
 
-    const user = await this.userRepostory.getUserByEmail(email);
+    const user = await this._userRepostory.getUserByEmail(email);
     if (!user) throw new UnauthorizedException('Login incorreto');
 
     const passwordMatch = await this._hasher.compare(password, user.password);

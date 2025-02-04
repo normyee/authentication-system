@@ -30,6 +30,10 @@ import { MemoryCacheModule } from 'src/user-auth/infra/modules/memory-cache.modu
     RegisterUserUseCase,
     LoginUserUseCase,
     LogoutUserUseCase,
+    {
+      provide: 'IUserRepository',
+      useExisting: UserRepository,
+    },
   ],
   exports: [],
 })
