@@ -4,7 +4,8 @@ import { UserRepository } from 'src/user-auth/infra/database/prisma/repositories
 import { PrismaModule } from 'src/user-auth/infra/database/prisma/prisma.module';
 import { RedisModule } from 'src/user-auth/infra/database/redis/redis.module';
 import { AuthController } from 'src/user-auth/infra/http/auth.controller';
-import { jwtSecurity } from 'src/user-auth/infra/services/jwt-security';
+import { jwtSecurity } from 'src/user-auth/infra/services/jwt-security.service';
+import { BcryptService } from 'src/user-auth/infra/services/hash.service';
 
 @Module({
   imports: [PrismaModule, RedisModule],
@@ -15,6 +16,10 @@ import { jwtSecurity } from 'src/user-auth/infra/services/jwt-security';
     {
       provide: 'ISignatureSecutiry',
       useClass: jwtSecurity,
+    },
+    {
+      provide: 'IHasher',
+      useClass: BcryptService,
     },
   ],
   exports: [AuthService],

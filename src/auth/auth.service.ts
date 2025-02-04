@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { LoginDTO } from './dto/login.dto';
 import { RedisService } from 'src/user-auth/infra/database/redis/redis.service';
 import { ISignatureSecutiry } from 'src/user-auth/application/interfaces/signature-security';
+import { IHasher } from 'src/user-auth/application/interfaces/hasher';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,7 @@ export class AuthService {
     private readonly userRepostory: UserRepository,
     @Inject('ISignatureSecutiry')
     private _signatureSecutiry: ISignatureSecutiry,
+    @Inject('IHasher') _hasher: IHasher,
     private readonly cacheMemory: RedisService,
   ) {}
   async signUp(data: UserDTO) {
