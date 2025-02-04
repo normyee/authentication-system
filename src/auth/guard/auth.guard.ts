@@ -16,14 +16,15 @@ export class AuthGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const request: Request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest();
 
     const token = this.extractTokenFromHeaders(request);
 
     if (!token) throw new UnauthorizedException('Sem acesso ao recurso');
 
     try {
-      this.jwtService.verify(token);
+      const payload = this.jwtService.verify(token);
+      request.userId = payload.id;
     } catch (error) {
       Logger.error(error.message);
       throw new UnauthorizedException('Sem acesso ao recurso');
