@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-export const PORT = process.env.PORT || 3000;
+export const PORT = +process.env.PORT || 3000;
 export const HOST = process.env.HOST || 'http://localhost';
 
 export const DATABASE_URL = process.env.DATABASE_URL;
@@ -15,3 +15,7 @@ export const GMAIL_PROVIDER = {
 export const SECREY_KEY = process.env.SECREY_KEY;
 
 export const QUEUE_HOST = process.env.QUEUE_HOST;
+
+export const MEMORY_DATABASE_HOST =
+  process.env.MEMORY_DATABASE_HOST;
+export const MEMORY_DATABASE_PORT = +process.env.MEMORY_DATABASE_PORT;
