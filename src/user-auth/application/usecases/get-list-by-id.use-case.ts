@@ -23,6 +23,6 @@ export class GetListByIdUseCase {
 
     if (user.verified === false) return null;
 
-    return await this._listRepository.getById(id);
+    return await this._listRepository.getById(id, session.userId);
   }
 }

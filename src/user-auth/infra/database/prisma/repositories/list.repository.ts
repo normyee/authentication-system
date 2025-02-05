@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { ListDTO } from 'src/user-auth/application/dtos/list.dto';
+import { IListRepository } from 'src/user-auth/domain/repositories/list.repository';
 
 @Injectable()
-export class ListRepository {
+export class ListRepository implements IListRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(userId: number, data: ListDTO) {
@@ -15,9 +16,12 @@ export class ListRepository {
     });
   }
 
-  async getById(id: number) {
+  async getById(id: number, userId: number) {
     return this.prisma.list.findUnique({
-      where: { id },
+      where: {
+        id,
+        userId,
+      },
     });
   }
 
