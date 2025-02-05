@@ -12,10 +12,11 @@ import { GetListByIdUseCase } from './user-auth/application/usecases/get-list-by
 import { DeleteListUseCase } from './user-auth/application/usecases/delete-list.use-case';
 import { jwtSecurity } from './user-auth/infra/services/jwt-security.service';
 import { MemoryCacheModule } from './user-auth/infra/modules/memory-cache.module';
+import { SECREY_KEY } from 'config';
 
 @Module({
   imports: [
-    JwtModule.register({ global: true, secret: 'jh;H=[}GsYn0rPd7H->H' }),
+    JwtModule.register({ global: true, secret: SECREY_KEY }),
     PrismaModule,
     AuthModule,
     MemoryCacheModule,

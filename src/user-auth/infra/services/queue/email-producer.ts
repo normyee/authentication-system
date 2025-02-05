@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as amqp from 'amqplib';
+import { QUEUE_HOST } from 'config';
 import { IEmailPublisher } from 'src/user-auth/application/interfaces/email-publisher';
 
 @Injectable()
@@ -13,7 +14,7 @@ export class EmailPublisher implements IEmailPublisher {
   }
 
   private async init() {
-    this.connection = await amqp.connect('amqp://localhost');
+    this.connection = await amqp.connect(QUEUE_HOST);
     this.channel = await this.connection.createChannel();
     await this.channel.assertQueue(this.queue, { durable: false });
   }

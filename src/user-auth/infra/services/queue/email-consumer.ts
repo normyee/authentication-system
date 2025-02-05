@@ -1,4 +1,5 @@
 import * as amqp from 'amqplib';
+import { QUEUE_HOST } from 'config';
 import { IMailingValidation } from 'src/user-auth/application/interfaces/mailing-validation';
 
 export class EmailSubscriber {
@@ -8,7 +9,7 @@ export class EmailSubscriber {
 
   public async startListening() {
     try {
-      const connection = await amqp.connect('amqp://localhost');
+      const connection = await amqp.connect(QUEUE_HOST);
       const channel = await connection.createChannel();
 
       await channel.assertQueue(this.queue, { durable: false });
