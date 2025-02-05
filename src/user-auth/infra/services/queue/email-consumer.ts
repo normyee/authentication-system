@@ -1,5 +1,5 @@
 import * as amqp from 'amqplib';
-import { QUEUE_HOST } from 'config';
+import { QUEUE_HOST } from 'src/config';
 import { IMailingValidation } from 'src/user-auth/application/interfaces/mailing-validation';
 
 export class EmailSubscriber {

@@ -1,5 +1,5 @@
 import * as nodemailer from 'nodemailer';
-import { GMAIL_PROVIDER, HOST, PORT } from 'config';
+import { GMAIL_PROVIDER, HOST, PORT } from 'src/config';
 import { IMailingValidation } from 'src/user-auth/application/interfaces/mailing-validation';
 import { Injectable } from '@nestjs/common';
 

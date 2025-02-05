@@ -1,5 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import Redis from 'ioredis';
+import { MEMORY_DATABASE_HOST, MEMORY_DATABASE_PORT } from 'src/config';
 import { ICachedMemory } from 'src/user-auth/application/interfaces/cached-memory';
 
 @Injectable()
@@ -8,8 +9,8 @@ export class RedisService implements OnModuleInit, ICachedMemory {
 
   constructor() {
     this.redis = new Redis({
-      host: 'localhost',
-      port: 6379,
+      host: MEMORY_DATABASE_HOST,
+      port: MEMORY_DATABASE_PORT,
     });
   }
 

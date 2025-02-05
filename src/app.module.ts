@@ -12,7 +12,7 @@ import { GetListByIdUseCase } from './user-auth/application/usecases/get-list-by
 import { DeleteListUseCase } from './user-auth/application/usecases/delete-list.use-case';
 import { jwtSecurity } from './user-auth/infra/services/jwt-security.service';
 import { MemoryCacheModule } from './user-auth/infra/modules/memory-cache.module';
-import { SECREY_KEY } from 'config';
+import { SECREY_KEY } from 'src/config';
 
 @Module({
   imports: [

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as amqp from 'amqplib';
-import { QUEUE_HOST } from 'config';
+import { QUEUE_HOST } from 'src/config';
 import { IEmailPublisher } from 'src/user-auth/application/interfaces/email-publisher';
 
 @Injectable()
