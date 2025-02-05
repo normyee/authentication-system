@@ -6,7 +6,7 @@ import { UserDTO } from 'src/user-auth/application/dtos/user.dto';
 export class UserRepository {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: UserDTO) {
+  async create(data: any) {
     return this.prisma.user.create({
       data,
     });
@@ -18,11 +18,17 @@ export class UserRepository {
     });
   }
 
+  async getUserByEmailToken(emailToken: string) {
+    return this.prisma.user.findUnique({
+      where: { emailToken },
+    });
+  }
+
   async get() {
     return this.prisma.user.findMany();
   }
 
-  async update(id: number, data: UserDTO) {
+  async update(id: number, data: any) {
     return this.prisma.user.update({
       where: { id },
       data,
