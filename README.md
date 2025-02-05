@@ -38,7 +38,7 @@ Essa arquitetura facilita a escalabilidade e a manutenção da aplicação, gara
 ### Endpoints
 `POST - /auth/signup`
 ```
-http://localhost:3000/auth/signup -> Cadastra um novo usuário.
+http://localhost:3000/auth/signup -> Cadastra um novo usuário e um e-mail de validação do e-mail registrado é enviado
 ```
 #### Exemplo:
 ```
@@ -82,7 +82,7 @@ http://localhost:3000/auth/logout-> Desloga usuário. É necessário que passemo
 ----------------------------------------------------------------------------------
 `POST - /list`
 ```
-http://localhost:3000/list -> Cria uma lista.
+http://localhost:3000/list -> Cria uma lista. Só será possível utilizar esta rota se o e-mail está validado
 ```
 #### Exemplo:
 ```
