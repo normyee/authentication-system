@@ -39,6 +39,10 @@ import { MemoryCacheModule } from './user-auth/infra/modules/memory-cache.module
       provide: 'ISignatureSecutiry',
       useClass: jwtSecurity,
     },
+    {
+      provide: 'IUserRepository',
+      useExisting: UserRepository,
+    },
   ],
 })
 export class AppModule {}
