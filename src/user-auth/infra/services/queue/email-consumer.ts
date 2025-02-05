@@ -1,13 +1,10 @@
 import * as amqp from 'amqplib';
-import { GmailUserValidationService } from '../mailing.service';
+import { IMailingValidation } from 'src/user-auth/application/interfaces/mailing-validation';
 
 export class EmailSubscriber {
   private readonly queue: string = 'mail_queue';
-  private emailService: GmailUserValidationService;
 
-  constructor() {
-    this.emailService = new GmailUserValidationService();
-  }
+  constructor(private readonly _mailingValidation: IMailingValidation) {}
 
   public async startListening() {
     try {
@@ -26,7 +23,7 @@ export class EmailSubscriber {
           console.log('Processando e-mail para:', targetEmail);
 
           try {
-            await this.emailService.execute(targetEmail, emailToken);
+            await this._mailingValidation.execute(targetEmail, emailToken);
             console.log('E-mail enviado com sucesso para:', targetEmail);
           } catch (error) {
             console.error('Erro ao enviar e-mail:', error);
