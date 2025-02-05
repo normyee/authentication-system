@@ -1,8 +1,10 @@
 import * as nodemailer from 'nodemailer';
 import { GMAIL_PROVIDER, HOST, PORT } from 'config';
-import { MailingValidation } from 'src/user-auth/application/interfaces/mailing-validation';
+import { IMailingValidation } from 'src/user-auth/application/interfaces/mailing-validation';
+import { Injectable } from '@nestjs/common';
 
-export class GmailUserValidationService implements MailingValidation {
+@Injectable()
+export class GmailUserValidationService implements IMailingValidation {
   async execute(targetEmail: string, emailToken: string): Promise<void> {
     try {
       const transporter = nodemailer.createTransport({
