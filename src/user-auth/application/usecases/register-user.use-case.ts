@@ -2,16 +2,15 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { IHasher } from 'src/user-auth/application/interfaces/hasher';
 import { UserDTO } from '../dtos/user.dto';
 import { IUserRepository } from 'src/user-auth/domain/repositories/user.repository';
-import { IMailingValidation } from '../interfaces/mailing-validation';
 import { IEmailToken } from '../interfaces/email-token';
+import { EmailPublisher } from 'src/user-auth/infra/services/queue/email-producer';
 
 @Injectable()
 export class RegisterUserUseCase {
   constructor(
     @Inject('IUserRepository') private readonly _userRepostory: IUserRepository,
     @Inject('IHasher') private readonly _hasher: IHasher,
-    @Inject('IMailingValidation')
-    private readonly _mailingValidation: IMailingValidation,
+    private readonly _emailPublisher: EmailPublisher,
     @Inject('IEmailToken') private readonly _emailToken: IEmailToken,
   ) {}
   async execute(data: UserDTO) {
@@ -24,7 +23,7 @@ export class RegisterUserUseCase {
 
     const emailToken = this._emailToken.generate();
 
-    await this._mailingValidation.execute(email, emailToken);
+    await this._emailPublisher.publishMessage(email, emailToken);
 
     return await this._userRepostory.create({
       name,

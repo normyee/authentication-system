@@ -12,6 +12,7 @@ import { MemoryCacheModule } from 'src/user-auth/infra/modules/memory-cache.modu
 import { VerifyEmailUseCase } from 'src/user-auth/application/usecases/verify-email.use-case';
 import { GmailUserValidationService } from '../services/mailing.service';
 import { EmailTokenService } from '../services/email-token.service';
+import { EmailPublisher } from '../services/queue/email-producer';
 
 @Module({
   imports: [PrismaModule, MemoryCacheModule],
@@ -34,6 +35,7 @@ import { EmailTokenService } from '../services/email-token.service';
     LoginUserUseCase,
     LogoutUserUseCase,
     VerifyEmailUseCase,
+    EmailPublisher,
     {
       provide: 'IUserRepository',
       useExisting: UserRepository,
