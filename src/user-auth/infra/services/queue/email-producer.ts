@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import * as amqp from 'amqplib';
+import { IEmailPublisher } from 'src/user-auth/application/interfaces/email-publisher';
 
 @Injectable()
-export class EmailPublisher {
+export class EmailPublisher implements IEmailPublisher {
   private readonly queue: string = 'mail_queue';
   private connection: amqp.Connection;
   private channel: amqp.Channel;

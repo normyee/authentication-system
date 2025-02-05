@@ -49,6 +49,10 @@ import { EmailPublisher } from '../services/queue/email-producer';
       provide: 'IEmailToken',
       useClass: EmailTokenService,
     },
+    {
+      provide: 'IEmailPublisher',
+      useClass: EmailPublisher,
+    },
   ],
   exports: [],
 })

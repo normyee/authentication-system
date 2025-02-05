@@ -3,14 +3,14 @@ import { IHasher } from 'src/user-auth/application/interfaces/hasher';
 import { UserDTO } from '../dtos/user.dto';
 import { IUserRepository } from 'src/user-auth/domain/repositories/user.repository';
 import { IEmailToken } from '../interfaces/email-token';
-import { EmailPublisher } from 'src/user-auth/infra/services/queue/email-producer';
+import { IEmailPublisher } from '../interfaces/email-publisher';
 
 @Injectable()
 export class RegisterUserUseCase {
   constructor(
     @Inject('IUserRepository') private readonly _userRepostory: IUserRepository,
     @Inject('IHasher') private readonly _hasher: IHasher,
-    private readonly _emailPublisher: EmailPublisher,
+    @Inject('IEmailPublisher') private readonly _emailPublisher: IEmailPublisher,
     @Inject('IEmailToken') private readonly _emailToken: IEmailToken,
   ) {}
   async execute(data: UserDTO) {
