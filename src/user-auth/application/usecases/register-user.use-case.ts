@@ -2,6 +2,11 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { IHasher } from 'src/user-auth/application/interfaces/hasher';
 import { UserDTO } from '../dtos/user.dto';
 import { IUserRepository } from 'src/user-auth/domain/repositories/user.repository';
+import { GmailUserValidationService } from 'src/user-auth/infra/services/mailing.service';
+import { EmailTokenService } from 'src/user-auth/infra/services/email-token.service';
+
+const emailTokenService = new EmailTokenService();
+const emailService = new GmailUserValidationService();
 
 @Injectable()
 export class RegisterUserUseCase {
@@ -17,10 +22,15 @@ export class RegisterUserUseCase {
 
     const hashedPassword = await this._hasher.hash(password, 10);
 
+    const emailToken = emailTokenService.generate();
+
+    await emailService.execute(email, emailToken);
+
     return await this._userRepostory.create({
       name,
       email,
       password: hashedPassword,
+      emailToken,
     });
   }
 }
